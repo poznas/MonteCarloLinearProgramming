@@ -5,7 +5,7 @@ import monte.linear_programming.StandardForm;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class NPoint {
+public class MultiPoint {
 
     private static final double acceptableError = 0.01;
 
@@ -65,7 +65,7 @@ public class NPoint {
             }else{
                 return String.valueOf(leftBorder);
             }
-        }).collect(Collectors.joining(","));
+        }).collect(Collectors.joining("|"));
     }
 
     public static HashMap<String,Double> getMiddle(StandardForm standardForm, long initSize) {
@@ -77,7 +77,6 @@ public class NPoint {
     }
 
     public static double distance(HashMap<String, Double> previousPoint, HashMap<String, Double> currentPoint) {
-        int n = currentPoint.size();
         double quadraticSum = 0.0;
         for(String var : previousPoint.keySet()){
             quadraticSum += Math.pow(Math.abs(previousPoint.get(var) - currentPoint.get(var)),2);

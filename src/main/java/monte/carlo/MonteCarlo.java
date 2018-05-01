@@ -31,7 +31,7 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
     public HashMap<String, Double> call() throws Exception {
 
         HashMap<String, Double> previousPoint, currentPoint;
-        previousPoint = NPoint.getMiddle(standardForm, (long) (radius*2));
+        previousPoint = MultiPoint.getMiddle(standardForm, (long) (radius*2));
 
         logger.log(Level.INFO,
                 "Calling Monte Carlo, initPoint: "
@@ -39,7 +39,7 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
         do{
             currentPoint = searchForCurrentPoint(previousPoint);
             if(chart != null)chart.addCurrentPoint(currentPoint);
-            radius = NPoint.distance(currentPoint, previousPoint);
+            radius = MultiPoint.distance(currentPoint, previousPoint);
 
             logger.log(Level.INFO, "Search results: previous: " + previousPoint
                     + "\ncurrent: " + currentPoint

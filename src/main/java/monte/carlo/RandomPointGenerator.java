@@ -9,13 +9,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,Double>>> {
 
-    private static final double GRID_UNIT = 0.2;
-    private static final int POINTS_PER_UNIT = 10;
+    static final double GRID_UNIT = 0.2;
+    static final int POINTS_PER_UNIT = 10;
     private double size;
     private HashMap<String,Double> shift;
     private HashMap<String,Double> globalBorder;
     private HashMap<String,Double> currentIdPoint;
-    private CopyOnWriteArrayList<String> handledSpaces;
+    private final CopyOnWriteArrayList<String> handledSpaces;
 
     private List<RandomPointGenerator> childTasks;
     private List<HashMap<String,Double>> resultPoints;
@@ -78,7 +78,7 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
 
     private void spawnNextGuideBranch() {
 
-        HashMap<String, Double> nextGuidePoint = NPoint.nextGuide(
+        HashMap<String, Double> nextGuidePoint = MultiPoint.nextGuide(
                 currentIdPoint, globalBorder, GRID_UNIT, size);
         if( nextGuidePoint == null ){
             return;
@@ -93,14 +93,17 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
     private void spawnDecrementBranches() {
 
         for( String dimension : currentIdPoint.keySet() ){
-            HashMap<String, Double> decrementPoint = NPoint.getDecrement(
+            HashMap<String, Double> decrementPoint = MultiPoint.getDecrement(
                     dimension, currentIdPoint, GRID_UNIT, size);
 
             if( decrementPoint != null ){
-                String id = NPoint.hash(decrementPoint, size, GRID_UNIT);
-                if( !handledSpaces.contains(id) ){
+                String id = MultiPoint.hash(decrementPoint, size, GRID_UNIT);
+                boolean spawn;
+                synchronized (handledSpaces){
+                    spawn = !handledSpaces.contains(id);
                     handledSpaces.add(id);
-
+                }
+                if( spawn ){
                     RandomPointGenerator newBranch = new RandomPointGenerator(
                             this, decrementPoint, shift, handledSpaces, null, size);
 

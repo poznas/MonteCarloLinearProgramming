@@ -14,7 +14,7 @@ import static monte.controllers.RootLayoutController.getDialogStage;
 
 public class Chart2D {
 
-    ChartDialog controller;
+    private ChartDialog controller;
 
     public void display() {
         try {
