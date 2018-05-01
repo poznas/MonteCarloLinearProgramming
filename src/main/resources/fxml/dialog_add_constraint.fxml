@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="dialogRoot" prefHeight="170.0" prefWidth="701.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monte.controllers.AddConstraintDialog">
+    <children>
+        <BorderPane layoutX="-88.0" layoutY="94.0" prefHeight="160.0" prefWidth="701.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <Group>
+                    <children>
+                        <VBox fx:id="mainBox" alignment="TOP_CENTER" prefHeight="106.0" prefWidth="648.0">
+                            <children>
+                        <Label fx:id="variablesLabel" text="[x1, x2, x3]">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                                <GridPane prefHeight="98.0" prefWidth="648.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0" minWidth="10.0" prefWidth="419.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.0" minWidth="10.0" prefWidth="43.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.0" minWidth="10.0" prefWidth="145.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints maxHeight="31.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <TextField fx:id="leftSideField" prefHeight="25.0" prefWidth="136.0" GridPane.rowIndex="1" />
+                                        <Label text="Constraint" textAlignment="CENTER" />
+                              <TextField fx:id="rightSideField" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <top>
+                                    <RadioButton fx:id="geqRadio" mnemonicParsing="false" text="≥" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font name="Cambria Math" size="14.0" />
+                                       </font></RadioButton>
+                                 </top>
+                                 <bottom>
+                                    <RadioButton fx:id="leqRadio" mnemonicParsing="false" selected="true" text="≤" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font></RadioButton>
+                                 </bottom>
+                              </BorderPane>
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </VBox>
+                    </children>
+                </Group>
+            </center>
+            <bottom>
+                <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <buttons>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleCancel" text="cancel">
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets></Button>
+                        <Pane prefHeight="40.0" prefWidth="231.0" />
+                        <Button fx:id="okButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleOK" text="OK" />
+                    </buttons>
+                    <BorderPane.margin>
+                        <Insets bottom="8.0" right="16.0" />
+                    </BorderPane.margin>
+                </ButtonBar>
+            </bottom>
+        </BorderPane>
+    </children>
+
+</AnchorPane>
