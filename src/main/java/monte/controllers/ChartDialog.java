@@ -4,13 +4,12 @@ import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DialogChart {
+public class ChartDialog {
 
     private static final double height = 700;
     public Pane chartPane;
@@ -30,7 +29,7 @@ public class DialogChart {
             Circle circle = new Circle();
             List<String> vars = new ArrayList<>(point.keySet());
             circle.setCenterX(point.get(vars.get(0)));
-            circle.setCenterY(700 - point.get(vars.get(1)));
+            circle.setCenterY(height - point.get(vars.get(1)));
             circle.setRadius(finalSize);
             circle.setFill(finalColor);
             return circle;
@@ -39,7 +38,6 @@ public class DialogChart {
                 chartPane.getChildren().add(point);
             });
         });
-        //drawLines();
     }
 
     public void addCurrent(HashMap<String,Double> currentPoint) {
@@ -49,26 +47,6 @@ public class DialogChart {
         circle.setCenterY(height - currentPoint.get(vars.get(1)));
         circle.setRadius(3);
         circle.setFill(javafx.scene.paint.Color.RED);
-        Platform.runLater(() ->{
-            chartPane.getChildren().add(circle);
-        });
-    }
-
-    private void drawLines() {
-        Line line1 = new Line(0,height-500,800,height-0);
-        Line line2 = new Line(0,height-900,450,height-0);
-        Platform.runLater(()->{
-            chartPane.getChildren().addAll(line1,line2);
-        });
-    }
-
-    public void addBluePoint(HashMap<String,Double> point) {
-        Circle circle = new Circle();
-        List<String> vars = new ArrayList<>(point.keySet());
-        circle.setCenterX(point.get(vars.get(0)));
-        circle.setCenterY(height - point.get(vars.get(1)));
-        circle.setRadius(1);
-        circle.setFill(Color.BLUE);
         Platform.runLater(() ->{
             chartPane.getChildren().add(circle);
         });

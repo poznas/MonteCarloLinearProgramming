@@ -1,7 +1,7 @@
 package monte.carlo;
 
 import monte.linear_programming.StandardForm;
-import monte.viewer.Chart;
+import monte.viewer.Chart2D;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class MonteCarlo implements Callable<HashMap<String, Double>> {
 
     private static final Logger logger = Logger.getLogger(MonteCarlo.class.getSimpleName());
-    private Chart chart;
+    private Chart2D chart;
 
     private StandardForm standardForm;
     private boolean searchForMax;
@@ -20,7 +20,7 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
     private static final double MIN_SEARCH_PROGRESS = 0.01;
     private double progress;
 
-    private MonteCarlo(double initSize, StandardForm standardForm, boolean searchForMax, Chart chart) {
+    private MonteCarlo(double initSize, StandardForm standardForm, boolean searchForMax, Chart2D chart) {
         radius = initSize / 2;
         this.standardForm = standardForm;
         this.searchForMax = searchForMax;
@@ -79,7 +79,7 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
         return result.orElse(previousPoint);
     }
 
-    public static HashMap<String, Double> get(StandardForm standardForm, double initSize, boolean searchForMax, Chart chart){
+    public static HashMap<String, Double> get(StandardForm standardForm, double initSize, boolean searchForMax, Chart2D chart){
 
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
         CompletionService<HashMap<String, Double>> completionService = new ExecutorCompletionService<>(executor);

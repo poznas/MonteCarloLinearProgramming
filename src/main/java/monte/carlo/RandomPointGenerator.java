@@ -38,11 +38,11 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
         }
     }
 
-    protected RandomPointGenerator(CountedCompleter<?> completer,
-                                   HashMap<String, Double> vector,
-                                   HashMap<String, Double> shift,
-                                   CopyOnWriteArrayList<String> handledSpaces,
-                                HashMap<String, Double> globalBorder, double size) {
+    private RandomPointGenerator(CountedCompleter<?> completer,
+                                 HashMap<String, Double> vector,
+                                 HashMap<String, Double> shift,
+                                 CopyOnWriteArrayList<String> handledSpaces,
+                                 HashMap<String, Double> globalBorder, double size) {
         super(completer);
         this.currentIdPoint = vector;
         this.shift = shift;

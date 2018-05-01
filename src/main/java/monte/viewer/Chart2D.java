@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import monte.Main;
-import monte.controllers.DialogChart;
+import monte.controllers.ChartDialog;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,9 +12,9 @@ import java.util.List;
 
 import static monte.controllers.RootLayoutController.getDialogStage;
 
-public class Chart {
+public class Chart2D {
 
-    DialogChart controller;
+    ChartDialog controller;
 
     public void display() {
         try {
@@ -22,7 +22,7 @@ public class Chart {
             loader.setLocation(Main.class.getResource("/fxml/dialog_chart.fxml"));
             AnchorPane dialogPane = loader.load();
 
-            Stage dialogStage = getDialogStage("Chart", dialogPane);
+            Stage dialogStage = getDialogStage("Chart2D", dialogPane);
 
             controller = loader.getController();
 
@@ -38,9 +38,5 @@ public class Chart {
 
     public void addCurrentPoint(HashMap<String,Double> currentPoint) {
         controller.addCurrent(currentPoint);
-    }
-
-    public void addBlueOne(HashMap<String,Double> point) {
-        controller.addBluePoint(point);
     }
 }

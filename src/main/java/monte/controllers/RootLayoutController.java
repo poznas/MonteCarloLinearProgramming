@@ -14,7 +14,7 @@ import monte.Main;
 import monte.carlo.MonteCarlo;
 import monte.linear_programming.Constraint;
 import monte.linear_programming.StandardForm;
-import monte.viewer.Chart;
+import monte.viewer.Chart2D;
 import monte.viewer.Viewer;
 
 import java.io.File;
@@ -167,29 +167,23 @@ public class RootLayoutController {
     }
 
     public void handleGetMin(ActionEvent actionEvent) {
-        if( Main.standardForm != null ){
-            Chart chart = null;
-            if( Main.standardForm.decisionVariables.size() == 2 ){
-                chart = new Chart();
-                chart.display();
-            }
-            Chart finalChart = chart;
-            new Thread(() -> {
-                System.out.println(MonteCarlo.get(Main.standardForm, MonteCarlo.INIT_SIZE, false, finalChart));
-            }).start();
-        }
+        runMonteCarlo(false);
     }
 
     public void handleGetMax(ActionEvent actionEvent) {
-        if( Main.standardForm != null ){
-            Chart chart = null;
-            if( Main.standardForm.decisionVariables.size() == 2 ){
-                chart = new Chart();
+        runMonteCarlo(true);
+    }
+
+    private void runMonteCarlo(boolean searchForMax) {
+        if (Main.standardForm != null) {
+            Chart2D chart = null;
+            if (Main.standardForm.decisionVariables.size() == 2) {
+                chart = new Chart2D();
                 chart.display();
             }
-            Chart finalChart = chart;
+            Chart2D finalChart = chart;
             new Thread(() -> {
-                System.out.println(MonteCarlo.get(Main.standardForm, MonteCarlo.INIT_SIZE, true, finalChart));
+                System.out.println(MonteCarlo.get(Main.standardForm, MonteCarlo.INIT_SIZE, searchForMax, finalChart));
             }).start();
         }
     }
