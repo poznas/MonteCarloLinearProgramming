@@ -33,19 +33,13 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
         HashMap<String, Double> previousPoint, currentPoint;
         previousPoint = MultiPoint.getMiddle(standardForm, (long) (radius*2));
 
-        logger.log(Level.INFO,
-                "Calling Monte Carlo, initPoint: "
-                + previousPoint + ", radius: " + radius);
+        logInitPoint(previousPoint);
         do{
             currentPoint = searchForCurrentPoint(previousPoint);
             if(chart != null)chart.addCurrentPoint(currentPoint);
             radius = MultiPoint.distance(currentPoint, previousPoint);
 
-            logger.log(Level.INFO, "Search results: previous: " + previousPoint
-                    + "\ncurrent: " + currentPoint
-                    + "\nradius: " + radius);
-            logger.log(Level.INFO, standardForm.result(currentPoint));
-
+            logSearchResults(previousPoint, currentPoint);
             previousPoint = currentPoint;
 
         }while (radius > MIN_SEARCH_PROGRESS);
@@ -59,8 +53,7 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
                 standardForm.decisionVariables, radius, previousPoint);
         pool.execute(generator);
         generator.join();
-
-        logger.log(Level.INFO, "Random points generated, size: " + generator.getResultPoints().size() );
+        logRandomGenerator(generator);
 
         if( chart != null ) chart.add(generator.getResultPoints());
         pool.shutdown();
@@ -94,5 +87,22 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
         }finally {
             executor.shutdown();
         }
+    }
+
+    private void logSearchResults(HashMap<String, Double> previousPoint, HashMap<String, Double> currentPoint) {
+        logger.log(Level.INFO, "Search results: previous: " + previousPoint
+                + "\ncurrent: " + currentPoint
+                + "\nradius: " + radius);
+        logger.log(Level.INFO, standardForm.result(currentPoint));
+    }
+
+    private void logInitPoint(HashMap<String, Double> previousPoint) {
+        logger.log(Level.INFO,
+                "Calling Monte Carlo, initPoint: "
+                        + previousPoint + ", radius: " + radius);
+    }
+
+    private void logRandomGenerator(RandomPointGenerator generator) {
+        logger.log(Level.INFO, "Random points generated, size: " + generator.getResultPoints().size() );
     }
 }
