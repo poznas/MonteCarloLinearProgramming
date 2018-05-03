@@ -26,10 +26,11 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
         currentIdPoint = new HashMap<>();
         this.size = radius*2.0;
 
-        for( String variable : variables ){
+        variables.forEach(variable -> {
             globalBorder.put(variable, size);
             currentIdPoint.put(variable, size*GRID_UNIT);
-        }
+        });
+
         handledSpaces = new CopyOnWriteArrayList<>();
 
         shift = new HashMap<>();
@@ -71,9 +72,8 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
 
     @Override
     public void onCompletion(CountedCompleter<?> caller) {
-        for( RandomPointGenerator generator : childTasks){
-            resultPoints.addAll(generator.getResultPoints());
-        }
+        childTasks.forEach(generator ->
+                resultPoints.addAll(generator.getResultPoints()));
     }
 
     private void spawnNextGuideBranch() {
@@ -92,7 +92,8 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
 
     private void spawnDecrementBranches() {
 
-        for( String dimension : currentIdPoint.keySet() ){
+        currentIdPoint.keySet().forEach(dimension ->{
+
             HashMap<String, Double> decrementPoint = MultiPoint.getDecrement(
                     dimension, currentIdPoint, GRID_UNIT, size);
 
@@ -112,7 +113,7 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
                     childTasks.add(newBranch);
                 }
             }
-        }
+        });
     }
 
     private void generateRandomPoints() {
@@ -121,6 +122,7 @@ public class RandomPointGenerator extends CountedCompleter<List<HashMap<String,D
         for( int i=0; i<POINTS_PER_UNIT; i++ ){
             HashMap<String, Double> point = new HashMap<>();
             boolean nonNegativeValues = true;
+
             for( String dimension : currentIdPoint.keySet()){
                 max = currentIdPoint.get(dimension);
                 min = max - GRID_UNIT*size;

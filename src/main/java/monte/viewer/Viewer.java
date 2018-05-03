@@ -2,7 +2,6 @@ package monte.viewer;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -10,9 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import monte.Main;
 import monte.linear_programming.Constraint;
 import monte.linear_programming.StandardForm;
@@ -43,7 +44,6 @@ public class Viewer {
         }
         flowPane.getChildren().clear();
         flowPane.setPadding(new Insets(10,10,10,10));
-        //flowPane.setOrientation(Orientation.VERTICAL);
 
         flowPane.getChildren().addAll(getNodes(Main.standardForm));
     }
@@ -52,9 +52,9 @@ public class Viewer {
         objectiveFunctionLabel.setText(standardForm.objectiveFunction);
         objectiveFunctionLabel.setStyle("-fx-font-size:40;");
         List<Node> nodes = new ArrayList<>();
-        for(Constraint constraint : standardForm.constraints){
-            nodes.add(getConstraintBox(constraint));
-        }
+        standardForm.constraints.forEach(
+                constraint -> nodes.add(getConstraintBox(constraint)));
+
         return nodes;
     }
 

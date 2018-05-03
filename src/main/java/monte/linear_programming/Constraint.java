@@ -16,9 +16,8 @@ public class Constraint {
 
     @Override
     public String toString() {
-        if( gt ){
-            return leftSide + " \\geq " + rightSide;
-        }
-        return leftSide + " \\leq " + rightSide;
+        return gt ?
+                leftSide + " \\geq " + rightSide :
+                leftSide + " \\leq " + rightSide;
     }
 }

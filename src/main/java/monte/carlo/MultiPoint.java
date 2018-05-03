@@ -60,27 +60,29 @@ public class MultiPoint {
             double intRatio = Math.floor(value / baseUnit);
             double leftBorder = intRatio * baseUnit;
             double rightBorder = (intRatio+1) * baseUnit;
-            if( ( value - leftBorder) > (rightBorder - value)){
-                return String.valueOf(rightBorder);
-            }else{
-                return String.valueOf(leftBorder);
-            }
+
+            return ( value - leftBorder) > (rightBorder - value) ?
+                    String.valueOf(rightBorder) :
+                    String.valueOf(leftBorder);
+
         }).collect(Collectors.joining("|"));
     }
 
     public static HashMap<String,Double> getMiddle(StandardForm standardForm, long initSize) {
         HashMap<String, Double> middlePoint = new HashMap<>();
-        for( String dimension : standardForm.decisionVariables){
-            middlePoint.put(dimension, (double) (0.5*initSize));
-        }
+        standardForm.decisionVariables.forEach(
+                var -> middlePoint.put(var, (0.5*initSize)));
+
         return middlePoint;
     }
 
     public static double distance(HashMap<String, Double> previousPoint, HashMap<String, Double> currentPoint) {
-        double quadraticSum = 0.0;
-        for(String var : previousPoint.keySet()){
-            quadraticSum += Math.pow(Math.abs(previousPoint.get(var) - currentPoint.get(var)),2);
-        }
+        double quadraticSum = previousPoint.keySet().stream()
+                .mapToDouble(var -> Math.pow(
+                        Math.abs(previousPoint.get(var) - currentPoint.get(var)), 2)
+                )
+                .sum();
+
         return Math.sqrt(quadraticSum);
     }
 }

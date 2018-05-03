@@ -5,6 +5,8 @@ import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Detector {
 
@@ -44,29 +46,16 @@ public class Detector {
     public List<String> variables(String expression){
 
         String cleared = whitespaceBuildIns(expression);
-        List<String> variables = removeNumbers(cleared.split("\\s+"));
+        Stream<String> variables = removeNumbers(cleared.split("\\s+"));
 
-        return removeDuplicates(variables);
+        return variables.distinct().collect(Collectors.toList());
     }
 
-    private List<String> removeDuplicates(List<String> variables) {
-        List<String> unique = new ArrayList<>();
-        for( String var : variables ){
-            if( !unique.contains(var)){
-                unique.add(var);
-            }
-        }
-        return unique;
-    }
-
-    private List<String> removeNumbers(String[] split) {
-        List<String> variables = new ArrayList<>();
-        for( String candidate : split ){
-            if( !candidate.matches("\\d+")){
-                variables.addAll(separateVariables(candidate));
-            }
-        }
-        return variables;
+    private Stream<String> removeNumbers(String[] split) {
+        return Arrays.stream(split).parallel()
+                .filter(candidate -> !candidate.matches("\\d+"))
+                .map(this::separateVariables)
+                .flatMap(Collection::stream);
     }
 
     private Collection<? extends String> separateVariables(String text) {

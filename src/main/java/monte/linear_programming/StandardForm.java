@@ -51,9 +51,8 @@ public class StandardForm {
         if( constraints == null ){
             constraints = new ArrayList<>();
         }
-        for(String variable : decisionVariables){
-            constraints.add(new Constraint(variable,"0",true));
-        }
+        decisionVariables.forEach( var ->
+                constraints.add(new Constraint(var,"0",true)));
     }
 
     public boolean meetsConstraints(HashMap<String, Double> point){
@@ -75,25 +74,26 @@ public class StandardForm {
         Expression expression = new ExpressionBuilder(equation)
                 .variables(new HashSet<>(decisionVariables)).build();
 
-        for( String variable : point.keySet()){
-            expression.setVariable(variable, point.get(variable));
-        }
+        point.keySet().forEach(var -> expression.setVariable(var, point.get(var)));
         return expression.evaluate();
     }
 
     public String result(HashMap<String,Double> point) {
-        String result = objectiveFunction + " = " + evaluate(objectiveFunction, point) + "\n";
-        for( Constraint constraint : constraints){
-            if( constraint.gt ){
-                result += constraint.leftSide + " = " + evaluate(constraint.leftSide, point)
-                        + " >= "  + constraint.rightSide + " = " + evaluate(constraint.rightSide, point) + "\n";
+        StringBuilder result = new StringBuilder(objectiveFunction + " = "
+                + evaluate(objectiveFunction, point) + "\n");
+
+        constraints.forEach( constraint -> {
+            result.append(constraint.leftSide).append(" = ")
+                    .append(evaluate(constraint.leftSide, point));
+            if ((constraint.gt)) {
+                result.append(" >= ");
+            } else {
+                result.append(" =< ");
             }
-            else{
-                result += constraint.leftSide + " = " + evaluate(constraint.leftSide, point)
-                        + " =< "  + constraint.rightSide + " = " + evaluate(constraint.rightSide, point) + "\n";
-            }
-        }
-        return result;
+            result.append(constraint.rightSide).append(" = ")
+                    .append(evaluate(constraint.rightSide, point)).append("\n");
+        });
+        return result.toString();
     }
 
     public double progress(HashMap<String,Double> previousPoint, HashMap<String,Double> currentPoint) {
