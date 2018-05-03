@@ -10,8 +10,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import monte.linear_programming.StandardForm;
 import monte.parse.Detector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
