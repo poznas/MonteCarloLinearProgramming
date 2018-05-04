@@ -53,22 +53,19 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
                 standardForm.decisionVariables, radius, previousPoint);
         pool.execute(generator);
         generator.join();
-        logRandomGenerator(generator);
-
-        if( chart != null ) chart.add(generator.getResultPoints());
         pool.shutdown();
 
+        logRandomGenerator(generator);
+        if( chart != null ) chart.add(generator.getResultPoints());
+
+        //Get the best point in parallel
         Optional<HashMap<String, Double>> result = generator.getResultPoints()
                 .parallelStream()
                 .filter(point -> standardForm.meetsConstraints(point))
-                .reduce( (A,B) -> {
-                    if((standardForm.calculateFunction(A)
-                            > standardForm.calculateFunction(B)) == searchForMax){
-                        return A;
-                    }else{
-                        return B;
-                    }
-                });
+                .reduce( (A,B) ->
+                        ((standardForm.calculateFunction(A)
+                        > standardForm.calculateFunction(B)) == searchForMax)? A : B);
+
         return result.orElse(previousPoint);
     }
 
@@ -76,8 +73,8 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
 
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
         CompletionService<HashMap<String, Double>> completionService = new ExecutorCompletionService<>(executor);
-        completionService.submit(new MonteCarlo(initSize, standardForm,searchForMax, chart));
 
+        completionService.submit(new MonteCarlo(initSize, standardForm,searchForMax, chart));
         try {
             Future<HashMap<String, Double>> result = completionService.take();
             return result.get();
@@ -90,7 +87,8 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
     }
 
     private void logSearchResults(HashMap<String, Double> previousPoint, HashMap<String, Double> currentPoint) {
-        logger.log(Level.INFO, "Search results: previous: " + previousPoint
+        logger.log(Level.INFO,
+                "Search results: previous: " + previousPoint
                 + "\ncurrent: " + currentPoint
                 + "\nradius: " + radius);
         logger.log(Level.INFO, standardForm.result(currentPoint));
@@ -98,8 +96,8 @@ public class MonteCarlo implements Callable<HashMap<String, Double>> {
 
     private void logInitPoint(HashMap<String, Double> previousPoint) {
         logger.log(Level.INFO,
-                "Calling Monte Carlo, initPoint: "
-                        + previousPoint + ", radius: " + radius);
+                "Calling Monte Carlo, initPoint: " + previousPoint
+                        + ", radius: " + radius);
     }
 
     private void logRandomGenerator(RandomPointGenerator generator) {
