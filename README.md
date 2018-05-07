@@ -1,7 +1,7 @@
 
 college project<br>
 subject: **operations research**<br>
-title: **Analytic Hierarchy Process**<br>
+title: **Linear Programming - Monte Carlo method**<br>
 <br>
 
 ![screen](https://raw.githubusercontent.com/poznas/monte-carlo-linear-programming/master/monte_carlo_screen_shot.png)
